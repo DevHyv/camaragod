@@ -1,0 +1,16 @@
+{
+  "name": "Camara Pro Web",
+  "short_name": "CamaraPro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/512.png?text=Camera",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
