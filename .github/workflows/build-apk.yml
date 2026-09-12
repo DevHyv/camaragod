@@ -12,35 +12,37 @@ jobs:
 
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 18
+          node-version: 22
 
-      - name: Configurar Java JDK 17
-        uses: actions/setup-java@v4
+      - name: Configurar Java JDK 21
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Instalación de Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
       - name: Inicializar y compilar APK con Bubblewrap
         run: |
+          mkdir -p android-project
+          
           # Generar configuración de la app
           bubblewrap init --manifest=https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json --directory=android-project
           cd android-project
           
-          # Generar keystore temporal para firmar la APK
+          # Generar keystore para firmar la APK
           keytool -genkey -v -keystore android.keystore -alias androiddb -keyalg RSA -keysize 2048 -validity 10000 -storepass password -keypass password -dname "CN=CamApp, OU=Dev, O=Dev, L=City, S=State, C=US"
           
-          # Compilar APK en modo Release / Signed
+          # Compilar APK
           bubblewrap build
 
       - name: Guardar APK como Artefacto de GitHub
