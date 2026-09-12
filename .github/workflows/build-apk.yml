@@ -35,15 +35,16 @@ jobs:
         run: |
           mkdir -p android-project
           
-          # Generar configuración de la app
-          bubblewrap init --manifest=https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json --directory=android-project
+          # La bandera --yes responde "Sí" automáticamente a los prompts interactivos
+          bubblewrap init --manifest=https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json --directory=android-project --yes
+          
           cd android-project
           
-          # Generar keystore para firmar la APK
+          # Generar keystore sin prompts (--batch)
           keytool -genkey -v -keystore android.keystore -alias androiddb -keyalg RSA -keysize 2048 -validity 10000 -storepass password -keypass password -dname "CN=CamApp, OU=Dev, O=Dev, L=City, S=State, C=US"
           
-          # Compilar APK
-          bubblewrap build
+          # Compilar la APK usando las variables de entorno JDK/SDK globales de la Action
+          bubblewrap build --yes
 
       - name: Guardar APK como Artefacto de GitHub
         uses: actions/upload-artifact@v4
